@@ -11,6 +11,14 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _fireRate = 1f;
     private float _canFire = 0f;
+    [SerializeField]
+    private int _lives = 3;
+    private SpawnManager _spawnManager;
+
+    private void Start()
+    {
+        _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -44,5 +52,18 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(transform.position.x, 0f, transform.position.z);
         else if (transform.position.y < -4f)
             transform.position = new Vector3(transform.position.x, -4f, transform.position.z);
+    }
+
+    public void Damage()
+    {
+        _lives--;
+
+        if (_lives < 1)
+        {
+            _spawnManager.OnPlayerDeath();
+            Destroy(this.gameObject);
+        }
+
+        Debug.Log("Lives: " + _lives);
     }
 }
